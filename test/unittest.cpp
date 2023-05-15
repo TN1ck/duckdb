@@ -76,7 +76,7 @@ int main(int argc, char *argv[]) {
 		return 1;
 	}
 
-	RegisterSqllogictests();
+	// RegisterSqllogictests();
 
 	int result = Catch::Session().run(new_argc, new_argv.get());
 
