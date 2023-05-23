@@ -217,6 +217,15 @@ unittest: debug
 	build/debug/test/unittest
 	build/debug/tools/sqlite3_api_wrapper/test_sqlite3_api_wrapper
 
+unittestamalcapicomplete:
+	amaldebug
+	build/amaldebug/test/unittest "[capi]"
+	build/amaldebug/tools/sqlite3_api_wrapper/test_sqlite3_api_wrapper
+
+unittestamalcapi:
+	build/amaldebug/test/unittest "[capi]"
+	build/amaldebug/tools/sqlite3_api_wrapper/test_sqlite3_api_wrapper
+
 unittestci:
 	python3 scripts/run_tests_one_by_one.py build/debug/test/unittest
 	build/debug/tools/sqlite3_api_wrapper/test_sqlite3_api_wrapper
