@@ -567,3 +567,25 @@ TEST_CASE("Decimal -> Double casting issue", "[capi]") {
 	auto string_from_decimal = result->Fetch<string>(0, 0);
 	REQUIRE(string_from_decimal == "-0.5");
 }
+
+TEST_CASE("Decimal -> Loses precision issues", "[amal]") {
+
+	CAPITester tester;
+	duckdb::unique_ptr<CAPIResult> result;
+
+	// open the database in in-memory mode
+	REQUIRE(tester.OpenDatabase(nullptr));
+
+	result = tester.Query("select 123456789.01234567890123456789 :: DECIMAL(38, 20)");
+	REQUIRE_NO_FAIL(*result);
+
+	REQUIRE(result->ColumnType(0) == DUCKDB_TYPE_DECIMAL);
+	duckdb_decimal decimal = result->Fetch<duckdb_decimal>(0, 0);
+	REQUIRE(decimal.scale == 20);
+	REQUIRE(decimal.width == 38);
+	REQUIRE(decimal.value.upper == 669260594);
+	REQUIRE(decimal.value.lower == 5097733592125636885);
+
+	auto string_from_decimal = result->Fetch<string>(0, 0);
+	REQUIRE(string_from_decimal == "123456789.01234567890123456789");
+}
